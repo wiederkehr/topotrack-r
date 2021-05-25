@@ -17,7 +17,7 @@ library(rayshader)
 library(raster)
 
 # Set working directory
-setwd("~/Development/trackmap-experiment-0.2")
+setwd("~/Development/topotrack")
 
 # Load GPX file and parse XML data
 filename <- "track.gpx"
