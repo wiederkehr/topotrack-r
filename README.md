@@ -5,7 +5,7 @@ A script to plot GPS tracks onto 2D or 3D topographic maps.
 ## Install
 
 - This script has been developed with [R](https://www.r-project.org/) version `3.6.3`.
-- This script requires [XQuartz](https://www.xquartz.org/) to render the 3D view on macOS 10.9 or later.
+- This script requires [XQuartz](https://www.xquartz.org/) to render the 3D view on macOS `10.9` or later.
 
 ### Dependencies
 
