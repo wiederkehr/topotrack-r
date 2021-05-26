@@ -1,5 +1,9 @@
 # General
 .DS_Store
 
+# Assets
+export
+tracks
+
 # History files
 .Rhistory
