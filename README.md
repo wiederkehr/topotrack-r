@@ -9,18 +9,19 @@ A script to plot GPS tracks onto 2D or 3D topographic maps.
 
 ### Dependencies
 
-- [`XML`](https://cran.r-project.org/web/packages/XML/index.html): Tools for parsing and creating XML.
-- [`plyr`](https://cran.r-project.org/web/packages/plyr/index.html): Tools for splitting, applying, and combining data.
+- [`av`](https://cran.r-project.org/web/packages/av/index.html): Tools for working with audio and video.
 - [`elevatr@0.2.0`](https://cran.r-project.org/web/packages/elevatr/index.html): Tools for accessing elevation data from various APIs.
-- [`sf`](https://cran.r-project.org/web/packages/sf/index.html): Standardized way to encode spatial vector data.
-- [`sp`](https://cran.r-project.org/web/packages/sp/index.html): Tools for working with spatial data.
+- [`plyr`](https://cran.r-project.org/web/packages/plyr/index.html): Tools for splitting, applying, and combining data.
 - [`raster`](https://cran.r-project.org/web/packages/raster/index.html): Tools for reading, writing, manipulating, analyzing and modeling of spatial data.
 - [`rayshader`](https://cran.r-project.org/web/packages/rayshader/index.html): Tools for creating and visualizing data in 2D and 3D.
+- [`sf`](https://cran.r-project.org/web/packages/sf/index.html): Standardized way to encode spatial vector data.
+- [`sp`](https://cran.r-project.org/web/packages/sp/index.html): Tools for working with spatial data.
+- [`XML`](https://cran.r-project.org/web/packages/XML/index.html): Tools for parsing and creating XML.
 
 ## Usage
 
-- Replace the GPS file with your own track in the working directory.
-- Replace the path of the working directory.
+- Replace the GPS file `track.gpx` with your own track in the working directory.
+- Replace the path to the working directory in `setwd`.
 
 ## Credits
 
