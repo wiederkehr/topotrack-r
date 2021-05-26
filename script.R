@@ -1,20 +1,22 @@
 # Install packages
-install.packages("XML")
-install.packages("plyr")
+install.packages("av")
 install.packages("https://cran.r-project.org/src/contrib/Archive/elevatr/elevatr_0.2.0.tar.gz", repos = NULL, type = "source")
-install.packages("sf")
-install.packages("sp")
+install.packages("plyr")
 install.packages("raster")
 install.packages("rayshader")
+install.packages("sf")
+install.packages("sp")
+install.packages("XML")
 
 # Import libraries
-library(XML)
-library(plyr)
+library(av)
 library(elevatr)
+library(plyr)
+library(raster)
+library(rayshader)
 library(sf)
 library(sp)
-library(rayshader)
-library(raster)
+library(XML)
 
 # Set working directory
 setwd("~/Development/topotrack")
@@ -25,8 +27,10 @@ gpx_raw <- XML::xmlTreeParse(filename, useInternalNodes = TRUE)
 gpx_root <- XML::xmlRoot(gpx_raw)
 gpx_metadata <- XML::xmlToList(gpx_root)$metadata
 gpx_trackdata <- XML::xmlToList(gpx_root)$trk
-gpx_time <- gpx_metadata[["time"]]
 gpx_name <- gpx_trackdata[["name"]]
+gpx_time <- gpx_metadata[["time"]]
+gpx_time <- sub("T", " ", gpx_time)
+gpx_time <- sub("\\+00:00", "", gpx_time)
 
 # Import GPX data into data frame
 gpx_track <- unlist(gpx_trackdata[names(gpx_trackdata) == "trkseg"], recursive = FALSE)
@@ -62,14 +66,18 @@ gpx_extent <- data.frame(
 )
 
 # Convert data frame with extent to Simple Feature collection
-gpx_extent_sf <- sf::st_as_sf(
+gpx_sf <- sf::st_as_sf(
   x = gpx_extent,
   coords = c("lon", "lat"),
   crs = 4326
 )
 
 # Get elevation raster image from AWS with Elevatr package
-ele_raster <- elevatr::get_elev_raster(gpx_extent_sf, z = 14, clip = "bbox")
+ele_raster <- elevatr::get_elev_raster(
+  gpx_sf,
+  z = 14,
+  clip = "bbox"
+)
 
 # Convert elevation raster image into elevation matrix
 ele_matrix <- matrix(
@@ -78,9 +86,9 @@ ele_matrix <- matrix(
 )
 
 # Get extents and dimensions from elevation raster image
-ele_raster_extent <- extent(ele_raster)
+ele_raster_extent <- raster::extent(ele_raster)
 ele_raster_dimemsion <- dim(ele_raster)
-ele_raster_resolution <- res(ele_raster)
+ele_raster_resolution <- raster::res(ele_raster)
 
 # Create vectors for x and y coordinates
 xmin_vec <- rep(ele_raster_extent@xmin, length(gpx$lon))
@@ -89,7 +97,7 @@ ymin_vec <- rep(ele_raster_extent@ymin, length(gpx$lat))
 # Set up lists of x, y, z coordinate
 x <- (gpx$lon - xmin_vec) / ele_raster_resolution[1]
 y <- (gpx$lat - ymin_vec) / ele_raster_resolution[2]
-z <- extract(ele_raster, gpx[, c(4, 5)])
+z <- raster::extract(ele_raster, gpx[, c(4, 5)])
 
 # Calculate Rayshader layers
 ambient_layer <- rayshader::ambient_shade(ele_matrix)
@@ -111,7 +119,7 @@ ele_matrix %>%
     phi = 45,
     solidcolor = "#eeeeee",
     solidlinecolor = "#eeeeee",
-    soliddepth = ele_min - 100, # lowest elevation - 100m = thickness of 100m
+    soliddepth = ele_min - 100,
     shadowdepth = ele_min - 100,
     shadowcolor = "#bbbbbb",
   )
@@ -123,8 +131,24 @@ rgl::lines3d(
   -y + ele_raster_dimemsion[1] / 2,
   color = "#fc5200",
   lwd = 2.0,
-  line_antialias = TRUE,
 )
 
-# Export static preview image from RGL window
-rayshader::render_snapshot("preview.png")
+# Export static preview image
+rayshader::render_snapshot(
+  filename = "preview",
+  title_text = gpx_time,
+  title_color = "#bbbbbb",
+  title_size = "16",
+  title_font = "mono",
+  title_position = "southeast",
+)
+
+# Export animated preview movie
+rayshader::render_movie(
+  filename = "preview",
+  title_text = gpx_time,
+  title_color = "#bbbbbb",
+  title_size = "16",
+  title_font = "mono",
+  title_position = "southeast",
+)
