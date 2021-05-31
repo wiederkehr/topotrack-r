@@ -115,13 +115,14 @@ ele_matrix %>%
   rayshader::add_shadow(ambient_layer, max_darken = 0.2) %>%
   rayshader::plot_3d(
     ele_matrix,
-    theta = 135,
+    theta = 225,
     phi = 45,
     solidcolor = "#eeeeee",
     solidlinecolor = "#eeeeee",
     soliddepth = ele_min - 100,
     shadowdepth = ele_min - 100,
     shadowcolor = "#bbbbbb",
+    windowsize = c(1200, 800),
   )
 
 # Plot the route in 3D
