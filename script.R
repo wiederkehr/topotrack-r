@@ -9,17 +9,14 @@ install.packages("sp")
 install.packages("XML")
 
 # Import libraries
-library(av)
-library(elevatr)
-library(plyr)
-library(raster)
-library(rayshader)
-library(sf)
-library(sp)
-library(XML)
-
-# Set working directory
-setwd("~/Development/topotrack")
+library("av")
+library("elevatr")
+library("plyr")
+library("raster")
+library("rayshader")
+library("sf")
+library("sp")
+library("XML")
 
 # Load GPX file and parse XML data
 filename <- "track.gpx"
